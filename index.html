@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deck of Cards Challenge</title>
+    <link rel="shortcut icon" type="image/png" href="cards.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+      integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container" style="margin-top: 10px">
+      <div class="row">
+        <div
+          class="col-md-6"
+          style="
+            border-style: solid;
+            border-color: black;
+            padding: 10px;
+            background-color: cornflowerblue;
+          "
+        >
+          Please input the size of the deck:
+          <br /><br />
+          <input type="number" name="text" id="textInput" />
+          <br /><br />
+          <button
+            class="btn-primary"
+            id="button"
+            onclick="display();"
+            style="margin-bottom: 5px"
+          >
+            Calculate
+          </button>
+
+          <div id="output"></div>
+        </div>
+        <div
+          class="col-md-6"
+          style="
+            border-style: solid;
+            border-color: black;
+            padding: 10px;
+            background-color: crimson;
+          "
+        >
+          <pre>
+          You are given a deck containing n cards. While holding the deck:
+
+          1. Take the top card off the deck and set it on the table.
+          2. Take the next card off the to`p and put it on the bottom of the deck in your hand.
+          3. Continue steps 1 and 2 untill all cards are on the table. This is a round.
+          4. Pick up the deck from the table and repeat steps 1-3 until the deck is in the original order.
+
+          Write a program to determine how many rounds it will take to put a deck back into the original order
+        </pre
+          >
+        </div>
+      </div>
+    </div>
+    <script>
+      function display() {
+        size = document.getElementById("textInput").value;
+        para = document.getElementById("output");
+        let originalArray = Array.from({ length: size }, (undefined, i) => i);
+        let changedArray = firstRound(originalArray);
+        let result = 1;
+
+        for (let i = 0; i < changedArray.length; i++) {
+          let rotationRounds = 1;
+          let rotate = i;
+
+          while (changedArray[rotate] !== i) {
+            rotate = changedArray[rotate];
+            rotationRounds++;
+          }
+
+          result = lcm(result, rotationRounds);
+        }
+
+        para.innerHTML = `
+        <p>The size of the deck is ${size}</p>
+        <p>It will take ${result} rounds to put the deck into its original order</p>`;
+      }
+
+      function firstRound(array) {
+        let table = [];
+        let hand = [...array];
+        while (hand.length > 1) {
+          table.unshift(hand.shift());
+          hand.push(hand.shift());
+        }
+        table.unshift(hand.shift());
+        return table;
+      }
+
+      function gcd(a, b) {
+        return b == 0 ? a : gcd(b, a % b);
+      }
+
+      function lcm(a, b) {
+        return (a * b) / gcd(a, b);
+      }
+    </script>
+  </body>
+</html>
